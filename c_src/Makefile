@@ -103,7 +103,13 @@ ifeq ($(shell expr $(ERL_VERSION) \>= 23), 1)
 else
 	LDLIBS += -L $(ERL_INTERFACE_LIB_DIR) -lei -lerl_interface
 endif
-LDFLAGS += -bundle -bundle_loader $(ERL_ROOT)/erts-*/bin/beam.smp -lstdc++
+
+ifeq ($(PLATFORM),darwin)
+	LDFLAGS += -bundle -bundle_loader $(ERL_ROOT)/erts-*/bin/beam.smp
+else
+	LDFLAGS += -shared
+endif
+LDFLAGS += -lstdc++
 
 # Verbosity.
 
